@@ -20,3 +20,7 @@ body {
 #creditBox{
   display: none;
 }
+
+.order-detail{
+  display: none;
+}
