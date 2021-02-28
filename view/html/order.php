@@ -27,19 +27,19 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
+                        <a class="nav-link" href="books.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="checkout.html">Cart</a>
+                        <a class="nav-link" href="checkout.php">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="order.html">Order <span class="sr-only">(current)</span></a>
+                        <a class="nav-link active" href="order.php">Order <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
                 <div class="col-6 d-flex justify-content-end align-items-center">
                     <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Search</button>
-                    <button class="btn btn-primary" style="min-width: 100px;" href="#">Sign in</button>
+                    <button class="btn btn-primary" style="min-width: 100px;" href="login.php">Sign in</button>
                     <!-- <button class="btn btn-outline-secondary" style="min-width: 100px;" href="#">Sign up</button> -->
                 </div>
             </div>
