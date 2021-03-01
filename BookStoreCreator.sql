@@ -6,7 +6,8 @@ create table if not exists users (
     `first_name` varchar(40) not null default '',
     `last_name` varchar(40) not null default '',
     `email` varchar(80) not null default '',
-    `address` varchar(100) not null default''
+    `address` varchar(100) not null default'',
+    `password` varchar(50) not null default ''
 )engine=InnoDB default charset=utf8;
 
 create table if not exists books (

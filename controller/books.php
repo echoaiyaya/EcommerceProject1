@@ -1,6 +1,8 @@
 <?php
 //require '../model/db_books.php';
 require 'E:/xampp/htdocs/project1/model/db_books.php';
+require 'users.php';
+
 class books {
     private $books;
     public function __construct() {
@@ -21,19 +23,24 @@ class books {
         return $getBooks;
     }
 
-    public function checkoutCookie($params) {
+    public function checkoutSession($params) {
         header('Content-Type:text/json;charset=utf-8');
-        if (empty($params['book_id'])) {
+        $users = new users();
+        if(!$users->checkLogin()) {
+            return json_encode(["code"=>400, "message" => "plase Sign in!"]);
+        }
+        if (empty($params['book_id']) && empty($params['quanlity'])) {
             return json_encode(["code"=>400, "message" => "params error"]);
         }
         $getBook = $this->books->getOneById($params["book_id"]);
         if (empty($getBook)) {
             return json_encode(["code"=>400, "message" => "no result"]);
         } else {
-            if($getBook["book_quality"] > 0) {
+            if($getBook["book_quanlity"] > 0 && $params["quanlity"] < $getBook["book_quanlity"]) {
+                $_SESSION['checkout'][] = ["book_id" => $params["book_id"], "quanlity" => $param['quanlity']];
                 return json_encode(["code"=>200, "message"=>"Success"]);
             } else {
-                return json_encode(["code"=>400, "message"=>"Sold Out"]);
+                return json_encode(["code"=>400, "message"=>"quantity error"]);
             }
         }
 
@@ -46,7 +53,7 @@ class books {
         $getBook = $this->books->getOneById($params["book_id"]);
         if (!empty($getBook)) {
             header('Content-Type:text/json;charset=utf-8');
-            if($getBook["book_quality"] > 0) {
+            if($getBook["book_quanlity"] > 0) {
                 return json_encode(["result"=>true]);
             } else {
                 return json_encode(["result"=>false]);

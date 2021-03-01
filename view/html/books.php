@@ -69,7 +69,7 @@ $allBooks = $books->books();
                           <p class="card-text">' . $value['book_description'] . '</p>
                           <p class="card-text h5">PRICE: <span style="color:red;">CDN$ '. $value['book_price'] .'</span></p>
                           <p class="card-text">'. $value['book_quality'] .' <span style="color:green;">In Stock</span></p>
-                          <input type="number" class="form-control mb-1" value="1">
+                          <input type="number" class="form-control mb-1" value="1" id="quantity'. $value['book_id'] .'">
                           <button class="btn btn-success mt-auto add-cart" bookid="' . $value['book_id'] . '">Add to Cart</button>
                         </div>
                       </div>
@@ -93,7 +93,8 @@ $allBooks = $books->books();
       allBtn.forEach((v) => {
         v.onclick = () => {
           let bookId = v.getAttribute("bookid");
-          fetch('http://localhost/project1/controller/geturl.php/books/checkoutCookie?book_id=' + bookId)
+          let quantity = document.querySelector("#quantity" + bookId).value;
+          fetch('http://localhost/project1/controller/geturl.php/books/checkoutSession?book_id=' + bookId + "&quanlity=" + quantity)
             .then((res) => {return res.json();})
             .then((result) => {
               if (result.code == 200) {

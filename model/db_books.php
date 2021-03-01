@@ -1,5 +1,5 @@
 <?php
-require 'db_connect.php';
+require_once 'db_connect.php';
 
 class db_books {
     private $db;
@@ -33,9 +33,13 @@ class db_books {
         $data = null;
         $bookId = $this->mysqli->real_escape_string($id);
         $result = $this->mysqli->query("select * from books where book_id = $bookId");
-        while($row = $result->fetch_assoc()) {
-            $data = $row;
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $data = $row;
+            }
         }
+        
+        
         return $data;
     }
 
