@@ -39,7 +39,9 @@ class db_users {
         $data = null;
         $e = $this->mysqli->real_escape_string($email);
         $w = $this->mysqli->real_escape_string($pwd);
-        $result = $this->mysqli->query("select * from users where email = $e and password = $w limit 1");
+        $sql = "select * from users where email = '$e' and password = '$w' limit 1";
+        $result = $this->mysqli->query($sql);
+        //var_dump($result->num_rows);
         if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 $data = $row;

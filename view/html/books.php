@@ -1,7 +1,8 @@
 <?php
-require "E:/xampp/htdocs/project1/controller/books.php";
+require $_SERVER['DOCUMENT_ROOT'] . "/project1/controller/books.php";
 $books = new books();
 $allBooks = $books->books();
+session_start();
 ?>
 <!doctype html>
 <html lang="en">
@@ -42,9 +43,16 @@ $allBooks = $books->books();
           </li>
         </ul>
         <div class="col-6 d-flex justify-content-end align-items-center">
-          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success my-2 my-sm-0 mr-sm-2">Search</button>
-          <button class="btn btn-primary" style="min-width: 100px;" href="login.php">Sign in</button>
+          <?php 
+              if (!empty($_SESSION['email'])) {
+                echo "<span style='color:#fff;margin-right:2em;'>Hi, " . $_SESSION['fname'] . " " . $_SESSION['lname'] . "</span>";
+                echo '<a class="btn btn-primary" style="min-width: 100px;" id="logout">Log Out</a>';
+              } else {
+                echo '<a class="btn btn-primary mr-2" style="min-width: 100px;" href="login.php">Sign in</a>
+                <a class="btn btn-primary" style="min-width: 100px;" href="register.php">Register</a>';
+              }
+          ?>
+          
           <!-- <button class="btn btn-outline-secondary" style="min-width: 100px;" href="#">Sign up</button> -->
         </div>
       </div>
@@ -80,12 +88,16 @@ $allBooks = $books->books();
         }
       ?>
     </div>
+    <div class="fixed-top w-50 m-auto alert alert-danger text-center" id="alertMsg" style="top:50px;display:none;" role="alert">
+      
+    </div>
   </main>
+
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
   <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
-  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/index.js"></script>
   <script>
     (() => {
       let allBtn = document.querySelectorAll(".add-cart");
@@ -94,16 +106,20 @@ $allBooks = $books->books();
         v.onclick = () => {
           let bookId = v.getAttribute("bookid");
           let quantity = document.querySelector("#quantity" + bookId).value;
-          fetch('http://localhost/project1/controller/geturl.php/books/checkoutSession?book_id=' + bookId + "&quanlity=" + quantity)
+          fetch('http://<?php echo $_SERVER['SERVER_NAME']; ?>/project1/controller/geturl.php/books/checkoutSession?book_id=' + bookId + "&quanlity=" + quantity)
             .then((res) => {return res.json();})
             .then((result) => {
+              //console.log(result.message);
               if (result.code == 200) {
-                alert("success");
+                alertMsg(true, result.message);
+              } else {
+                alertMsg(false, result.message);
               }
             });
         };
       });
     })();
+
   </script>
 
 </html>

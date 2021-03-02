@@ -1,6 +1,6 @@
 <?php
 //require '../model/db_books.php';
-require 'E:/xampp/htdocs/project1/model/db_books.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/project1/model/db_books.php';
 require 'users.php';
 
 class books {
@@ -23,6 +23,46 @@ class books {
         return $getBooks;
     }
 
+    public function getBookFromSession() {
+        $data = [];
+        if (!empty($_SESSION['checkout'])) {
+            $carts = $_SESSION['checkout'];
+            foreach ($carts as $key => $value) {
+                $result = $this->books->getOneById($value['book_id']);
+                $result['quantity'] = $value['quanlity'];
+                $data[] = $result;
+            }
+            return $data;
+        } else {
+            return $data;
+        }
+    }
+
+    public function removeCheckOutBook($params) {
+        header('Content-Type:text/json;charset=utf-8');
+        if (empty($params['bookid'])) return json_encode(["code"=>400, "message" => "miss bookid"]); 
+        session_start();
+        if (!empty($_SESSION['checkout'])) {
+            $price = 0;
+            foreach ($_SESSION['checkout'] as $key => $value) {
+                if ($value['book_id'] == $params['bookid']) {
+                    array_splice($_SESSION['checkout'], $key, 1);
+                } else {
+                    $result = $this->books->getOneById($value['book_id']);
+                    $price += (int)$value['quanlity'] * $result['book_price'];
+                }
+            }
+            $price = round($price, 2);
+            $tax = round($price * 0.13, 2);
+            $total = $price + $tax;
+            $priceData = ["price" => $price, "tax" => $tax, "total" => $total];
+            return json_encode(["code"=>200, "message" => "operation complete", "price" => $priceData]);
+        } else {
+            return json_encode(["code"=>400, "message" => "no data"]);
+        }
+    }
+
+
     public function checkoutSession($params) {
         header('Content-Type:text/json;charset=utf-8');
         $users = new users();
@@ -36,8 +76,24 @@ class books {
         if (empty($getBook)) {
             return json_encode(["code"=>400, "message" => "no result"]);
         } else {
-            if($getBook["book_quanlity"] > 0 && $params["quanlity"] < $getBook["book_quanlity"]) {
-                $_SESSION['checkout'][] = ["book_id" => $params["book_id"], "quanlity" => $param['quanlity']];
+            if($getBook["book_quality"] > 0 && $params["quanlity"] <= $getBook["book_quality"]) {
+                if (!empty($_SESSION['checkout'])) {
+                    $inCheckOut = false;
+                    foreach($_SESSION['checkout'] as $k => $value) {
+                        if ($value['book_id'] == $params['book_id']) {
+                            $value['quanlity'] = (int)$value['quanlity'] + (int)$params['quanlity'];
+                            if ($value['quanlity'] > $getBook["book_quality"]) return json_encode(["code"=>400, "message"=>"quantity error"]);
+                            $_SESSION['checkout'][$k] = $value;
+                            $inCheckOut = true;
+                        }
+                    }
+                    if (!$inCheckOut) {
+                        $_SESSION['checkout'][] = ["book_id" => $params["book_id"], "quanlity" => $params['quanlity']];
+                    }
+                } else {
+                    $_SESSION['checkout'][] = ["book_id" => $params["book_id"], "quanlity" => $params['quanlity']];
+                }
+                //var_dump($params);
                 return json_encode(["code"=>200, "message"=>"Success"]);
             } else {
                 return json_encode(["code"=>400, "message"=>"quantity error"]);

@@ -26,18 +26,17 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="books.php">Home <span class="sr-only">(current)</span></a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="checkout.php">Cart</a>
+                        <a class="nav-link" href="checkout.html">Cart</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="order.php">Order</a>
+                        <a class="nav-link" href="order.html">Order</a>
                     </li>
                 </ul>
                 <div class="col-6 d-flex justify-content-end align-items-center">
-                    
                     <a class="btn btn-primary mr-2" style="min-width: 100px;" href="login.php">Sign in</a>
                     <a class="btn btn-primary" style="min-width: 100px;" href="register.php">Register</a>
                     <!-- <button class="btn btn-outline-secondary" style="min-width: 100px;" href="#">Sign up</button> -->
@@ -48,51 +47,65 @@
     </nav>
 
     <main role="main" class="container">
-        <div class="row w-50 m-auto">
-
+        <div class="row w-50" style="margin: 0 auto;">
+            
+            <div class="form-group col-12">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName" name="firstName">
+            </div>
+            <div class="form-group col-12">
+                <label for="lastName">Last Name:</label>
+                <input type="text" class="form-control" id="lastName" name="lastName">
+            </div>
             <div class="form-group col-12">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email">
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="form-group col-12">
+                <label for="address">Address:</label>
+                <input type="text" class="form-control" id="address" name="address">
             </div>
             <div class="form-group col-12">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password">
+                <input type="password" class="form-control" id="password" name="password">
             </div>
             <div class="form-group col-12">
                 <p id="msg"></p>
             </div>
             <div class="form-group col-12">
-                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                <button type="submit" id="register" class="btn btn-primary col-12">Register</button>
             </div>
             
-        
         </div>
     </main>
-    <div class="fixed-top w-50 m-auto alert alert-danger text-center" id="alertMsg" style="top:50px;display:none;" role="alert">
-      
-    </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
     <script>
-        let alertMsg = document.querySelector("#alertMsg");
+        
+        let firstName = document.querySelector("#firstName");
+        let lastName = document.querySelector("#lastName");
         let email = document.querySelector("#email");
+        let address = document.querySelector("#address");
         let password = document.querySelector("#password");
-        let submitBtn = document.querySelector("#submit");
+        let registerBtn = document.querySelector("#register");
         let msg = document.querySelector("#msg");
         (() => {
-            login();
+            register();
         })();
 
-        function login() {  
+        function register() {  
             
-            submitBtn.onclick = () => {
+            registerBtn.onclick = () => {
                 let formData = new FormData();
+                formData.append('fname', firstName.value);
+                formData.append('lname', lastName.value);
                 formData.append('email', email.value);
+                formData.append('address', address.value);
                 formData.append('password', password.value);
 
-                fetch('http://localhost/project1/controller/geturl.php/users/login', {
+                fetch('http://localhost/project1/controller/geturl.php/users/register', {
                     method: 'POST',
                     body: formData
                 })
@@ -102,29 +115,16 @@
                     msg.innerHTML = '';
                     if (response.code == 400) {
                         let msgHtml = '';
-                        if (response.detail != null) {
-                            response.detail.forEach((v) => {
+                        response.detail.forEach((v) => {
                         
-                                msgHtml += v + ' is error<br>';
-                            });
-                            console.log(msgHtml);
-                            msg.style.color = 'red';
-                            msg.innerHTML = msgHtml;
-                        } else {
-                            alertMsg.innerHTML = response.message;
-                            alertMsg.style.display = 'block';
-                            setTimeout(() => {
-                                alertMsg.style.display = 'none';
-                            }, 1000);
-                        }
-                        
-                        
+                            msgHtml += v + ' is error<br>';
+                        });
+                        console.log(msgHtml);
+                        msg.style.color = 'red';
+                        msg.innerHTML = msgHtml;
                     } else if (response.code == 200) {
                         msg.style.color = 'green';
-                        msg.innerHTML = response.message + '<br>you will jump to home page in 5 seconds.';
-                        setTimeout(() => {
-                            window.location.href = "books.php";
-                        }, 5000);
+                        msg.innerHTML = response.message;
                     }
                 });
             };  

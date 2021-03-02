@@ -1,5 +1,5 @@
 <?php
-require 'E:/xampp/htdocs/project1/model/db_users.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/project1/model/db_users.php';
 class users {
     private $users;
     public function __construct() {
@@ -7,6 +7,7 @@ class users {
     }
 
     public function checkLogin() {
+        session_start();
         if (empty($_SESSION['email'])) {
             return false;
         } else {
@@ -16,6 +17,7 @@ class users {
 
     public function logout() {
         header('Content-Type:text/json;charset=utf-8');
+        session_start();
         session_destroy();
         return json_encode(["code"=>200, "message" => "log out success"]);
     }
@@ -35,6 +37,7 @@ class users {
             $result = $this->users->getOneByEmailAndPwd($email, $password);
             if (!empty($result)) {
                 session_start();
+                $_SESSION['id'] = $result['user_id'];   
                 $_SESSION['fname'] = $result['first_name'];
                 $_SESSION['lname'] = $result['last_name'];
                 $_SESSION['email'] = $result['email'];
@@ -51,8 +54,8 @@ class users {
         header('Content-Type:text/json;charset=utf-8');
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = [];
-            if (empty($_POST['fname'])) $error[] = 'fname';
-            if (empty($_POST['lname'])) $error[] = 'lname';
+            if (empty($_POST['fname'])) $error[] = 'first name';
+            if (empty($_POST['lname'])) $error[] = 'last name';
             if (empty($_POST['email'])) $error[] = 'email';
             if (empty($_POST['address'])) $error[] = 'address';
             if (empty($_POST['password'])) $error[] = 'password';
