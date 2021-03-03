@@ -92,7 +92,7 @@
                 formData.append('email', email.value);
                 formData.append('password', password.value);
 
-                fetch('http://localhost/project1/controller/geturl.php/users/login', {
+                fetch('http://<?php echo $_SERVER['SERVER_NAME'];?>/project1/controller/geturl.php/users/login', {
                     method: 'POST',
                     body: formData
                 })

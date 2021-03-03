@@ -105,7 +105,7 @@
                 formData.append('address', address.value);
                 formData.append('password', password.value);
 
-                fetch('http://localhost/project1/controller/geturl.php/users/register', {
+                fetch('http://<?php echo $_SERVER['SERVER_NAME']; ?>/project1/controller/geturl.php/users/register', {
                     method: 'POST',
                     body: formData
                 })
@@ -124,7 +124,15 @@
                         msg.innerHTML = msgHtml;
                     } else if (response.code == 200) {
                         msg.style.color = 'green';
-                        msg.innerHTML = response.message;
+                        let time = 3;
+                        setInterval(() => {
+                            msg.innerHTML = response.message + ` your will jump to Login page in ${time--} seconds`; 
+                        }, 1000);    
+                        setTimeout(() => {
+                            
+                            window.location.href = 'login.php';
+                        }, 4000);
+                        
                     }
                 });
             };  

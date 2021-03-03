@@ -177,10 +177,13 @@ $totalNoTax = 0;
         let total = document.querySelector("#total");
         let radio = document.querySelector("#paymentRadio");
         let credit = document.querySelector("#creditRadio");
-        let radioBtn = document.querySelector(".radio:checked");
+        let radioBtns = document.querySelectorAll(".radio");
         let box = document.querySelector("#creditBox");
         let removeBtns = document.querySelectorAll(".btn-remove");
         let submitBtn = document.querySelector("#submit-order");
+        let creditV = document.querySelector("#credit");
+        let expirV = document.querySelector("#expir");
+        let cvvV = document.querySelector("#cvv");
         //let alertMsg = document.querySelector("#alertMsg");
 
         (() => {
@@ -202,16 +205,25 @@ $totalNoTax = 0;
                     });
                     
                 }
+                let radioBtn = '';
+                radioBtns.forEach((v) => {
+                    if(v.checked)  radioBtn = v.value;
+                })
                 let formData = new FormData();
                 formData.append("fname", fname.value);
                 formData.append("lname", lname.value);
                 formData.append("address", address.value);
                 formData.append("email", email.value);
-                formData.append("payMethod", radioBtn.value);
+                formData.append("payMethod", radioBtn);
                 formData.append("price", Number(price.innerText));
                 formData.append("tax", Number(tax.innerText));
                 formData.append("totalPrice", Number(total.innerText));
                 formData.append("books", JSON.stringify(booksData));
+                if (radioBtn == 'credit') {
+                    formData.append("credit", creditV.value);
+                    formData.append("expir", expirV.value);
+                    formData.append("cvv", cvvV.value);
+                }
                 fetch("http://<?php echo $_SERVER['SERVER_NAME']; ?>/project1/controller/geturl.php/orders/comfirmOrders", {
                     method: "POST", 
                     body: formData
@@ -259,7 +271,7 @@ $totalNoTax = 0;
                 removeBtns.forEach((e) => {
                     e.onclick = () => {
                         let bookid = e.getAttribute('bookid');
-                        fetch("http://localhost/project1/controller/geturl.php/books/removeCheckOutBook?bookid=" + bookid)
+                        fetch("http://<?php echo $_SERVER['SERVER_NAME']; ?>/project1/controller/geturl.php/books/removeCheckOutBook?bookid=" + bookid)
                         .then((res) => {return res.json();})
                         .then((result) => {
                             if (result.code == 200) {

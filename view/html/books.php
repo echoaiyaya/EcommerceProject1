@@ -78,7 +78,13 @@ session_start();
                           <p class="card-text h5">PRICE: <span style="color:red;">CDN$ '. $value['book_price'] .'</span></p>
                           <p class="card-text">'. $value['book_quality'] .' <span style="color:green;">In Stock</span></p>
                           <input type="number" class="form-control mb-1" value="1" id="quantity'. $value['book_id'] .'">
-                          <button class="btn btn-success mt-auto add-cart" bookid="' . $value['book_id'] . '">Add to Cart</button>
+                          <div class="row">
+                           
+                            <div class="col-6"><button class="w-100 btn btn-success add-cart" bookid="' . $value['book_id'] . '">Add to Cart</button></div>
+                            <div class="col-6"><button class="w-100 btn btn-success go-cart" bookid="' . $value['book_id'] . '">Buy Now</button></div>
+                            
+                              
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -99,26 +105,41 @@ session_start();
   <script>window.jQuery || document.write('<script src="../assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
   <script src="../js/index.js"></script>
   <script>
+    let allBtn = document.querySelectorAll(".add-cart");
+    let goBtns = document.querySelectorAll(".go-cart");
     (() => {
-      let allBtn = document.querySelectorAll(".add-cart");
       
-      allBtn.forEach((v) => {
-        v.onclick = () => {
-          let bookId = v.getAttribute("bookid");
-          let quantity = document.querySelector("#quantity" + bookId).value;
-          fetch('http://<?php echo $_SERVER['SERVER_NAME']; ?>/project1/controller/geturl.php/books/checkoutSession?book_id=' + bookId + "&quanlity=" + quantity)
-            .then((res) => {return res.json();})
-            .then((result) => {
-              //console.log(result.message);
-              if (result.code == 200) {
-                alertMsg(true, result.message);
-              } else {
-                alertMsg(false, result.message);
-              }
-            });
-        };
-      });
+      saveItems(allBtn, false);
+      saveItems(goBtns, true);
+      
     })();
+
+    function saveItems(btns, linkTo) {
+      if (btns != null) {
+        btns.forEach((v) => {
+          v.onclick = () => {
+            let bookId = v.getAttribute("bookid");
+            let quantity = document.querySelector("#quantity" + bookId).value;
+            fetch('http://<?php echo $_SERVER['SERVER_NAME']; ?>/project1/controller/geturl.php/books/checkoutSession?book_id=' + bookId + "&quanlity=" + quantity)
+              .then((res) => {return res.json();})
+              .then((result) => {
+                //console.log(result.message);
+                if (result.code == 200) {
+                  
+                  if (linkTo) {
+                    window.location.href="checkout.php";
+                  } else {
+                    alertMsg(true, result.message);
+                  }
+                } else {
+                  alertMsg(false, result.message);
+                }
+              });
+          };
+        });
+      }
+      
+    }
 
   </script>
 

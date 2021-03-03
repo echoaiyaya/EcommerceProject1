@@ -49,7 +49,11 @@ class orders {
             if (empty($_POST['tax']) || $_POST['tax'] == 0) return json_encode(["code" => 400, "message" => "miss tax"]); 
             if (empty($_POST['totalPrice']) || $_POST['totalPrice'] == 0) return json_encode(["code" => 400, "message" => "miss total price"]); 
             if (empty($_POST['payMethod']) || $_POST['payMethod'] == 'undefined') return json_encode(["code" => 400, "message" => "miss pay mothod"]); 
-             
+            if ($_POST['payMethod'] == "credit") {
+                if (empty($_POST['credit']) || $_POST['credit'] == 'undefined') return json_encode(["code" => 400, "message" => "miss credit card number"]); 
+                if (empty($_POST['expir']) || $_POST['expir'] == 'undefined') return json_encode(["code" => 400, "message" => "miss expir"]); 
+                if (empty($_POST['cvv']) || $_POST['cvv'] == 'undefined') return json_encode(["code" => 400, "message" => "miss cvv"]);                 
+            }
             //var_dump($_POST);die;
             $result = $this->orders->insertOrder($_SESSION['id'], $_POST['fname'],$_POST['lname'],$_POST['email'],$_POST['address'], $_POST['price'], $_POST['tax'], $_POST['totalPrice'], $_POST['payMethod']);
             if ($result) {

@@ -88,65 +88,6 @@ $ordersData = $orders->getOrdersFromSession();
                     
                 }
             ?>
-            
-            <div class="card col-12 mb-2">
-                <div class="card-body">
-                    <div class="d-flex">
-                        <div class="d-flex flex-column mr-3">
-                            <h5 class="card-title">Order Place</h5>
-                            <p class="card-text">05/12/2020</p>
-                        </div>
-                        <div class="d-flex flex-column mr-3">
-                            <h5 class="card-title">Total</h5>
-                            <p class="card-text">CDN$ 33.33</p>
-                        </div>
-                        <div class="d-flex flex-column">
-                            <h5 class="card-title">Ship To</h5>
-                            <p class="card-text">Jinqian Wang / 731 William St</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row order-detail">
-                        <div class="col-12 mb-2">
-                            <div class="row">
-                                <div class="col-2" >
-                                    <img style="max-height: 10em; max-width: 10em;" src="../images/download.jpg" alt="...">
-                                </div>
-                                <div class="col-10">
-                                    <p class="card-text">price: CDN$ 12</p>
-                                    <p class="card-text">Quantity: 2</p>
-                                    <p class="card-text">items price: CDN$ 24</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2">
-                            <div class="row">
-                                <div class="col-2" >
-                                    <img style="max-height: 10em; max-width: 10em;" src="../images/download.jpg" alt="...">
-                                </div>
-                                <div class="col-10">
-                                    <p class="card-text">price: CDN$ 12</p>
-                                    <p class="card-text">Quantity: 2</p>
-                                    <p class="card-text">items price: CDN$ 24</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-2">
-                            <div class="row">
-                                <div class="col-2" >
-                                    <img style="max-height: 10em; max-width: 10em;" src="../images/download.jpg" alt="...">
-                                </div>
-                                <div class="col-10">
-                                    <p class="card-text">price: CDN$ 12</p>
-                                    <p class="card-text">Quantity: 2</p>
-                                    <p class="card-text">items price: CDN$ 24</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#" class="btn btn-primary detailbtn" open="false">Detail</a>
-                </div>
-            </div>
         </div>
     </main>
     <div class="fixed-top w-50 m-auto alert alert-danger text-center" id="alertMsg" style="top:50px;display:none;" role="alert">
